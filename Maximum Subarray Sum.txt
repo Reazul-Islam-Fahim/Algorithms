@@ -1,0 +1,48 @@
+package Divide_And_Conquer;
+
+import java.util.Scanner;
+
+public class maximum_subarray_sum 
+{
+    static int CrossingSum(int a[], int l, int mid, int r)
+    {
+        int sum = 0;
+        int left_sum = Integer.MIN_VALUE;
+        int right_sum = Integer.MIN_VALUE;
+        for(int i=mid; i>=l;i--)
+        {
+            sum = sum +a[i];
+            if(sum>left_sum) left_sum = sum;
+        }
+        sum = 0;
+        for(int i=mid+1;i<=r;i++)
+        {
+            sum = sum +a[i];
+            if(sum>right_sum) right_sum = sum;
+        }
+        return Math.max(left_sum+right_sum,Math.max(left_sum, right_sum));
+        
+    }
+    static int SubarraySum(int a[], int l, int r)
+    {
+        if(l==r) return a[l];
+        int mid = (l+r)/2;
+        int sum = Math.max(SubarraySum(a,l,mid),SubarraySum(a,mid+1,r));
+        sum = Math.max(sum, CrossingSum(a,l,mid,r));
+        return sum;
+    }
+    public static void main(String[] args)
+    {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter the array size: ");
+        int n = input.nextInt();
+        System.out.print("Enter the array elements: ");
+        int a[] = new int[n];
+        for(int i=0;i<n;i++)
+        {
+            a[i] = input.nextInt();
+        }
+        int max_sum = SubarraySum(a, 0, n-1);
+        System.out.println("Maximum contiguous sum is: "+max_sum);
+    }
+}

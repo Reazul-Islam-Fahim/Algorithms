@@ -1,0 +1,43 @@
+package DP;
+/**
+ Topic: Matrix Chain Multiplication
+ */
+import java.util.Scanner;
+public class MCM 
+{
+    public static void main(String[] args)
+    {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter the number of matrices: ");
+        int n = input.nextInt();
+        int dim[] = new int[n+1];
+        System.out.print("Enter dimensions("+(n+1)+"): ");
+        for(int i=0;i<=n;i++)
+        {
+            dim[i] = input.nextInt();
+        }
+        int c[][] = new int[n+1][n+1];
+        int key[][] = new int[n+1][n+1];
+        
+        //calculating minimum cost
+        for(int len=1; len<n; len++)
+        {
+            for(int i=1; i<= n-len; i++)
+            {
+                int j = i+len;
+                c[i][j] = Integer.MAX_VALUE;
+                for(int k=i;k<j;k++)
+                {
+                    int cost =c[i][k]+c[k+1][j]+(dim[i-1]*dim[k]*dim[j]);
+                    if(cost < c[i][j])
+                    {
+                        c[i][j] = cost;
+                        key[i][j] = k;
+                    }
+                }
+            }
+        }
+        System.out.println("The minimum cost is: "+c[1][n]);
+    }
+}
+

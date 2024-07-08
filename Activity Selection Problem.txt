@@ -1,0 +1,67 @@
+package Greedy;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Scanner;
+
+/**
+Topic: Activity Selection Problem
+ */
+class Activity
+{
+    int start, finish,ind;
+    public Activity(int start, int finish,int ind)
+    {
+        this.start = start;
+        this.finish = finish;
+        this.ind = ind;
+    }
+}
+class Compare
+{
+    static void compare(Activity arr[], int n)
+    {
+        Arrays.sort(arr, new Comparator<Activity>()
+        {
+            @Override
+            public int compare(Activity s1, Activity s2)
+            {
+                return s1.finish - s2.finish;
+            }
+        });
+    }
+}
+public class Activity_Selection_Problem {
+    static void printMaxActivities(Activity arr[], int n)
+    {
+        Compare obj = new Compare();
+        obj.compare(arr, n);
+        System.out.println("Following activities are selected: ");
+        int i=0;
+        System.out.print(arr[i].ind+" ");
+        for(int j=1;j<n;j++)
+        {
+            if(arr[j].start >= arr[i].finish)
+            {
+                System.out.print(arr[j].ind+" ");
+                i=j;
+            }
+        }
+    }
+    public static void main(String[] args)
+    {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Number of activities: ");
+        int n = input.nextInt();
+        Activity arr[] = new Activity[n];
+        for(int i=0;i<n;i++)
+        {
+            System.out.print("Activity "+(i+1)+"'s start time: ");
+            int s = input.nextInt();
+            System.out.print("Activity "+(i+1)+"'s finish time: ");
+            int f = input.nextInt();
+            arr[i] = new Activity(s,f,i+1);
+        }
+        printMaxActivities(arr, n);
+    }
+}

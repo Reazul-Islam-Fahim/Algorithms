@@ -1,0 +1,60 @@
+package Sorting;
+
+import java.util.Scanner;
+
+public class Heap_Sort {
+    public static void maxHeapify(int a[], int n,int i)
+    {
+        int largest = i;
+        int l = (2*i);
+        int r = (2*i)+1;
+        while(l<=n && a[l]>a[largest])
+        {
+            largest = l;
+        }
+        while(r<=n && a[r]>a[largest])
+        {
+            largest = r;
+        }
+        if(largest!=i)
+        {
+            int temp = a[largest];
+            a[largest] = a[i];
+            a[i] =temp;
+            maxHeapify(a,n,largest);
+        }
+    }
+    public static void heapsort(int a[], int n)
+    {
+        int i,temp;
+        for(i=n/2;i>=1;i--)
+        {
+            maxHeapify(a,n,i);
+        }
+        for(i=n;i>=1;i--)
+        {
+            temp = a[1];
+            a[1] = a[i];
+            a[i] =temp;
+            maxHeapify(a,n,1);
+        }
+    }
+    public static void main(String[] args)
+    {
+        Scanner input =new Scanner(System.in);
+        System.out.print("Enter the number of elements: ");
+        int n = input.nextInt();
+        System.out.print("Enter the array elements: ");
+        int a[] = new int[n+1];
+        int max = Integer.MIN_VALUE;
+        for(int i=1;i<=n;i++)
+        {
+            a[i] =input.nextInt();
+        }
+        heapsort(a,n);
+        for(int i=1;i<=n;i++)
+        {
+            System.out.print(a[i]+" ");
+        }
+    }     
+}

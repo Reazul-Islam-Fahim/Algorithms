@@ -1,0 +1,77 @@
+package DP;
+/**Topic: 0/1 Knapsack*/
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Scanner;
+
+public class knapsack01 
+{
+  public static void main(String[] args) 
+  {
+        Scanner in = new Scanner(System.in);
+        //Input
+        System.out.print("Number of elements: ");
+        int n = in.nextInt();
+        int val[] = new int[n];
+        int wt[] = new int[n];
+
+        System.out.print("Value of the elements: ");
+        for(int i=0;i<n;i++)
+        { 
+            val[i]=in.nextInt();
+        }
+        System.out.print("Weight of the elements: ");
+        for(int i=0;i<n;i++)
+        { 
+            wt[i]=in.nextInt(); 
+        }
+
+        System.out.print("Capacity of the knapsack: ");
+        int W = in.nextInt();
+        //Knapsack
+        int[][] Profit = new int[n+1][W+1];
+        for(int i=0;i<n+1;i++)
+            {
+                Profit[i][0]=0;//As weight=0, for all items profit=0
+            } 
+        for(int j=0;j<W+1;j++)
+            { Profit[0][j]=0;//As item number=0, profit=0  } 
+
+        for(int i=1; i<=n; i++) 
+            {
+                for(int w=1; w<=W; w++) 
+                    {
+                        if(wt[i-1]<=w)//if the weight[item]<=capacity we can either pick it or not
+                        {
+                            Profit[i][w]=Math.max(val[i-1]+Profit[i-1][w-wt[i-1]], Profit[i-1][w]);
+                        }
+                        else//if the weight[item]> capacity we can't pick that item
+                        Profit[i][w]=Profit[i-1][w];
+                    }
+            }
+        System.out.println("Maximum profit: "+Profit[n][W]);
+    //Print Optimal Items
+    int i = n;
+    int j = W;
+    ArrayList list = new ArrayList();
+    while (i > 0 && j > 0)
+    {
+      if(Profit[i][j] != Profit[i-1][j])
+         {
+                   list.add(i);
+                   j = j-wt[i-1];
+                   i = i-1;
+         }
+      else
+        {
+                  i = i-1;
+        }
+    }
+    Collections.sort(list);
+    System.out.println("Items in optimal subset : "+list);
+  
+ }
+}
+
+

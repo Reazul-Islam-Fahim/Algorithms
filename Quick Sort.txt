@@ -1,0 +1,53 @@
+package Sorting;
+import java.util.Scanner;
+public class Quick_Sort 
+{
+    static int partition(int a[], int low, int high)
+    {
+        int pivot =a[low];
+        int i = low, j =high;
+        while(i<j)
+        {
+            while(a[i]<=pivot && i<high) i++;
+            while(a[j]>pivot)j--;
+            if(i<j) 
+            {   //swap (a[i],a[j)
+                int temp = a[i];
+                a[i] = a[j];
+                a[j] = temp;
+            }
+        }
+        int temp = a[low];
+        a[low] = a[j];
+        a[j]= temp;
+        return j;
+    }
+    static void QuickSort(int a[],int low, int high)
+    {
+        if(low<high)
+        {
+        int pivot = partition(a,low,high);
+        QuickSort(a,low,pivot-1);
+        QuickSort(a, pivot+1,high);
+        }
+    }
+    public static void main(String[] args)
+    {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter the number of elements: ");
+        int n = input.nextInt();
+        int a[] = new int[n];
+        System.out.print("Enter the elements: ");
+        for(int i=0;i<n;i++)
+        {
+            a[i]=input.nextInt();
+        }
+        QuickSort(a,0,n-1);
+        System.out.print("After Sorting: ");
+        for(int i=0;i<n;i++)
+        {
+            System.out.print(a[i]+" ");
+        }
+        
+    }
+}

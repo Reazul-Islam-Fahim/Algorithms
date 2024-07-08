@@ -1,0 +1,54 @@
+import java.util.Scanner;
+public class Rod_Cutting_Problem 
+{
+    public static void main(String[] args)
+    {
+        //Input section
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter the length of rod: ");
+        int n = input.nextInt();
+        int length[] = new int[n];
+        int price[] = new int[n];
+
+        System.out.println("Enter price for different length of rod: ");
+        for(int i=0;i<n;i++)
+        {
+            length[i] = i+1;
+            System.out.print("price for length "+(i+1)+": ");
+            price[i] = input.nextInt();
+        }
+
+        int profit[][] = new int[n+1][n+1];
+        
+        //Counting the maximum profit
+        for(int i=0;i<=n;i++)
+        {
+            for(int j=0;j<=n;j++)
+            {
+                if(i==0||j==0) profit[i][j] = 0;
+                else if(length[i-1]<=j)
+                {
+             profit[i][j] = Math.max(price[i-1]+profit[i][j-length[i-1]], profit[i-1][j]);
+                }
+                else
+                {
+                   profit[i][j] = profit[i-1][j]; 
+                }
+            }
+        }
+        System.out.println("Maximum profit is: "+profit[n][n]);
+
+        //printing lengths
+        int i = n, j=n;
+        while(profit[i][j]!=0)
+        {
+            if(profit[i-1][j]==profit[i][j]) i--;
+            else if(profit[i-1][j]!=profit[i][j])
+            {
+                System.out.print(i+" ");
+                j=j-i;
+            }
+        }
+        
+    }
+}

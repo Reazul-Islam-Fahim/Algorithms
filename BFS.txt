@@ -1,0 +1,101 @@
+/*BFS algorithm implementation using: 1.array of linkedlist, 2.Queue, 3.Backtracking*/
+package Graph;
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class BFS {
+    
+    private LinkedList<Integer> adj[];
+    
+    //Constructor of BFS class which creates adjacency list for graph representation
+    public BFS(int v)
+    {
+        adj = new LinkedList[v];
+        for(int i=0; i<v; i++)
+        {
+            // creating linked list to store adjacent vertices of each vertex
+            adj[i] = new LinkedList<Integer>();
+        }
+    }
+    
+    //This function is used for adding edges
+    public void addEdge(int src, int des)
+    {
+        adj[src].add(des);
+        adj[des].add(src);
+    }
+    
+    //will help to find the shortest path between source and destination by using parent array
+    public int bfs_search(int src, int des)
+    {
+        boolean vis[] = new boolean[adj.length];//it will be true if the vertex is visited
+        vis[src] = true;//source node will be visited
+        
+        int parent[] = new int[adj.length];
+        parent[src] = -1;//Source vertex doesn't have parent(-1)
+        
+        Queue <Integer> q = new LinkedList<> ();
+        q.add(src);//Enter source in the queue
+        
+        //main part of bfs
+        while(!q.isEmpty())
+        {
+            int cur = q.poll();
+            //will take the first element from the queue and check whether it is destination or not
+            if(cur == des)
+            {
+                break;//break if destination node is reached
+            }
+            //else check the neighbor nodes of current(cur) node
+            for(int neighbor: adj[cur]){
+                if(!vis[neighbor]){
+                    //if neighbor isn't visited make it vis[true] and add to queue
+                    vis[neighbor]=true;
+                    q.add(neighbor);
+                    //assign the current(cur) node as parent of the neighbor node
+                    parent[neighbor] = cur;
+                }
+            }
+        }
+        //backtracking
+        //find distance between src & dest by using parent array
+        int pos = des;
+        int distance = 0;
+        while(parent[pos]!=-1)
+        {
+            System.out.print(pos+"-->");
+            pos = parent[pos];
+            distance++;
+        }
+        if(pos==src)
+        System.out.print(src+"\n");
+        
+        return distance;
+    }
+    //Main Funtion
+    public static void main(String args[]){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter the number of vertices: ");
+        int v = input.nextInt();
+        System.out.println("Enter the number of edges: ");
+        int e = input.nextInt();
+        
+        BFS g = new BFS(v);
+        System.out.println("Enter "+e+" edges:");
+        for(int i=0;i<e;i++){
+            int src = input.nextInt();
+            int des = input.nextInt();
+            
+            g.addEdge(src, des);
+        }
+        
+        System.out.println("Enter source and destination:");
+        int src = input.nextInt();
+        int des = input.nextInt();
+        int dis = g.bfs_search(src,des);
+        System.out.println("Minimum distance between "+src+" and "+des+" is: "+dis);
+               
+    }    
+}

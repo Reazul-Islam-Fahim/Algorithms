@@ -1,0 +1,76 @@
+package Divide_And_Conquer;
+
+import java.util.Scanner;
+
+public class Counitng_Inversion 
+{
+    static int merge(int arr[], int l, int mid, int r)
+    {
+        int inv_count = 0;
+        int n = arr.length;
+        int[] temp = new int[n];
+        int i=l,j=mid+1,k=0;
+        while(i<=mid && j<=r)
+        {
+            if(arr[i]<=arr[j])
+            {
+                temp[k] = arr[i];
+                k++;
+                i++;
+            }
+            else
+            {
+                temp[k] = arr[j];
+                k++;
+                j++;
+                inv_count = inv_count + (mid+1-i);
+            }
+        }
+        while(i<=mid)
+        {
+            temp[k] = arr[i];
+            k++;
+            i++;  
+        }
+        while(j<=r)
+        {
+            temp[k] = arr[j];
+            k++;
+            j++;
+        }
+        k=0;
+        for(i=l;i<=r;i++)
+        {
+            arr[i] = temp[k];
+            k++;
+        }
+        return inv_count;
+    }
+    static int mergesort(int arr[], int l, int r)
+    {
+        int mid, inv_count = 0;
+        if(l<r)
+        {
+            mid = (l+r)/2;
+            inv_count = inv_count + mergesort(arr,l,mid);
+            inv_count = inv_count + mergesort(arr,mid+1,r);
+            inv_count = inv_count + merge(arr, l, mid, r);
+        }
+        return inv_count;
+    }
+    public static void main(String[] args)
+    {
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter the size of the array: ");
+        int n = input.nextInt();
+        int a[] = new int[n];
+        System.out.print("Enter the array elements: ");
+        for(int i=0;i<n;i++)
+        {
+            a[i] = input.nextInt();
+        }
+        int inversion_count = mergesort(a,0,n-1);
+        System.out.println("Inversion count = "+inversion_count);
+        
+    }
+}

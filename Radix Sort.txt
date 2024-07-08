@@ -1,0 +1,53 @@
+package Sorting;
+
+import java.util.Scanner;
+
+public class Radix_Sort {
+    public static void countsort(int a[], int n, int pos)
+    {
+        int output[] = new int[n];
+        int count[] = new int[10];
+        for(int i=0;i<n;i++)
+        {
+            count[(a[i]/pos)%10]++;
+        }
+        for(int i=1;i<10;i++)
+        {
+            count[i] = count[i]+count[i-1];
+        }
+        for(int i=n-1;i>=0;i--)
+        {
+            output[--count[(a[i]/pos)%10]]=a[i];
+        }
+        for(int i=n-1;i>=0;i--)
+        {
+            a[i]=output[i];
+        }
+    }
+    public static void radixsort(int a[], int n, int max)
+    {
+        for(int pos=1;max/pos>0;pos=pos*10)
+        {
+            countsort(a,n,pos);
+        }
+    }
+    public static void main(String[] args)
+    {
+        Scanner input =new Scanner(System.in);
+        System.out.print("Enter the number of elements: ");
+        int n = input.nextInt();
+        System.out.print("Enter the array elements: ");
+        int a[] = new int[n];
+        int max = Integer.MIN_VALUE;
+        for(int i=0;i<n;i++)
+        {
+            a[i] =input.nextInt();
+            if(a[i]>max)max = a[i];
+        }
+        radixsort(a,n,max);
+        for(int i=0;i<n;i++)
+        {
+            System.out.print(a[i]+" ");
+        }
+    }      
+}

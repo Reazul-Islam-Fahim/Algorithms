@@ -1,0 +1,87 @@
+/*
+DFS algorithm implementation using recursion
+ */
+package Graph;
+import java.util.LinkedList;
+import java.util.Scanner;
+public class DFS {
+    
+    private LinkedList<Integer> adj[];
+    
+    //constructor of DFS class ja graph representation er adjacency list create kore
+    public DFS(int v)
+    {
+        adj = new LinkedList[v];
+        for(int i=0; i<v; i++)
+        {
+            adj[i] = new LinkedList<Integer>();//protita vertice er jonno edge rakhar linkedlist
+        }
+    }
+    
+    //Edge add korar jonno ei function use kora hoi
+    public void addEdge(int src, int des)
+    {
+        adj[src].add(des);
+        adj[des].add(src);
+    }
+    
+    //source o destination er moddhe path ache kina ber kore
+    private boolean dfs_search(int src, int des, boolean vis[]){
+        if(src==des)
+            return true;
+        
+        for(int neighbor: adj[src])
+        {
+            if(!vis[neighbor]){
+                vis[neighbor]=true;
+                boolean isConnected = dfs_search(neighbor,des,vis);
+                if(isConnected) {
+                    System.out.print(neighbor+"-->");
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    public boolean dfs(int src, int des){
+        boolean vis[] = new boolean[adj.length];
+        vis[src] = true;
+        System.out.print("Path: ");
+        return dfs_search(src,des,vis);
+    }
+    
+    public static void main(String args[]){
+        Scanner input = new Scanner(System.in);
+        System.out.println("Enter the number of vertices: ");
+        int v = input.nextInt();
+        System.out.println("Enter the number of edges: ");
+        int e = input.nextInt();
+        
+        DFS g = new DFS(v);
+        System.out.println("Enter "+e+" edges:");
+        for(int i=0;i<e;i++){
+            int src = input.nextInt();
+            int des = input.nextInt();
+            
+            g.addEdge(src, des);
+        }
+        
+        System.out.println("Enter source and destination:");
+        int src = input.nextInt();
+        int des = input.nextInt();
+        boolean path = g.dfs(src,des);
+        if(path)
+        {
+            System.out.print(src);
+            System.out.println("\nThere exist a path between "+src+" and "+des+".");
+        }
+        else
+        {
+            System.out.println("\nThere is no path between "+src+" and "+des+".");
+        }
+        
+        
+    }
+    
+}

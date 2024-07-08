@@ -1,0 +1,102 @@
+package dijkstra;
+
+import java.util.*;
+
+class Edge {
+  int targetNode;
+  int distanceFromNode;
+
+  Edge(int targetNode, int distance) {
+    this.targetNode = targetNode;
+    this.distanceFromNode = distance;
+  }
+}
+
+class Graph {
+  List<List<Edge>> graph;
+  boolean visited[];
+  int distance[];
+
+  Graph(int nodes) {
+    graph = new ArrayList<>();
+    visited = new boolean[nodes];
+    distance = new int[nodes];
+
+    for (int i = 0; i < nodes; i++) {
+      graph.add(i, new ArrayList<>());
+      distance[i] = Integer.MAX_VALUE;
+    }
+  }
+
+  public void addEdge(int sourceNode, int targetNode, int distance) {
+    graph.get(sourceNode).add(new Edge(targetNode, distance));
+    //graph.get(targetNode).add(new Edge(sourceNode, distance));
+  }
+
+  public int minimumDistanceBetweenTwoNodes(int source, int destination) {
+    if (source == destination)
+      return 0;
+
+    PriorityQueue<Edge> minHeap = new PriorityQueue<>((e1, e2) -> e1.distanceFromNode - e2.distanceFromNode);
+
+    distance[source] = 0;
+    minHeap.add(new Edge(0, 0));
+
+    while (!minHeap.isEmpty()) {
+      int v = minHeap.poll().targetNode;
+      if (visited[v])
+        continue;
+
+      visited[v] = true;
+
+      List<Edge> childList = graph.get(v);
+
+      for (Edge child : childList) {
+        int dist = child.distanceFromNode;
+        int childNode = child.targetNode;
+
+        if (!visited[childNode] && (distance[v] + dist < distance[childNode])) {
+          distance[childNode] = distance[v] + dist;
+          child.distanceFromNode = distance[v] + dist;
+          minHeap.add(child);
+        }
+      }
+    }
+
+    return distance[destination];
+  }
+
+}
+
+public class Dijkstra {
+
+  public static void main(String[] args) {
+   int nodes;
+        System.out.print("Enter number of vertices: ");
+        Scanner input=new Scanner(System.in);
+        nodes=input.nextInt();
+        System.out.println();
+
+    Graph a = new Graph(nodes);
+
+    System.out.print("Enter number of edges: ");
+        int edge=input.nextInt();
+        System.out.println();
+        
+        System.out.println("Enter Edges: ");
+    for(int i=0;i<edge;i++)
+        {
+            int n,m,d;
+            n=input.nextInt();
+            m=input.nextInt();
+            d=input.nextInt();
+            a.addEdge(n,m,d);
+        }
+    System.out.println("Enter source vertex and destination vertex:");
+            int source=input.nextInt();
+            int dest=input.nextInt();
+
+    System.out.println("Minimum distance between "+source+"and "+dest+" is: "+
+            a.minimumDistanceBetweenTwoNodes(source, dest));
+  }
+}
